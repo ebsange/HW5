@@ -106,9 +106,11 @@ def test_influence_map(rj):
 
 
 def test_recommend_by_influence(rj):
+    print(sn.influence_map(rj, "Mercutio"))
     assert_equals(['Capulet', 'Montague', 'Benvolio',
                    'Friar Laurence', 'Juliet'],
                   sn.recommend_by_influence(rj, "Mercutio"))
+    
     print("recommend by influence test passed")
 
 

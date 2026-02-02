@@ -161,28 +161,17 @@ def num_common_friends_map(graph, user):
 
 
 def num_map_to_sorted_list(map_with_number_vals):
-    sorted_dict = dict(sorted(map_with_number_vals.items(), key=itemgetter(1), reverse=True))
-    sorted_list = list(sorted_dict.keys())
-    return sorted_list
-    """Given a dictionary, return a list of the keys in the dictionary.
-    The keys are sorted by the number value they map to, from greatest
-    number down to smallest number.
-    When two keys map to the same number value, the keys are sorted by their
-    natural sort order for whatever type the key is, from least to greatest.
-
-    Arguments:
-        map_with_number_vals: a dictionary whose values are numbers
-
-    Returns: a list of keys, sorted by the values in map_with_number_vals
-    """
-
+    step1 = sorted(map_with_number_vals.items(), key = itemgetter(0))
+    step2 = sorted(step1, key = itemgetter(1), reverse = True)
+    sortedList = []
+    for key in step2:
+        sortedList.append(key[0])
+        
+    return sortedList
 
 
 def recommend_by_num_common_friends(graph, user):
-    final=num_common_friends_map(graph, user)
-    final = dict(sorted(final.items(), key=itemgetter(0)))
-    final= dict(sorted(final.items(), key=itemgetter(1), reverse=True))
-    return num_map_to_sorted_list(final)
+    return num_map_to_sorted_list(num_common_friends_map(graph, user))
 
     """
     Returns a list of friend recommendations for the user, sorted
@@ -209,10 +198,10 @@ def recommend_by_num_common_friends(graph, user):
 
 def influence_map(graph, user):
     dict={}
-    sum = 0
     for friend in friends_of_friends(graph, user):
+        sum = 0
         for commonFriend in common_friends(graph, user, friend):
-            sum += 1 / len(friends(graph, user))
+            sum += 1 / len(friends(graph, commonFriend))
         dict[friend] = sum
     return dict
 
@@ -236,7 +225,9 @@ def recommend_by_influence(graph, user):
     case of a tie in influence score, the names/IDs are sorted
     by their natural sort order, from least to greatest.
     """
-    pass
+
+    return num_map_to_sorted_list(influence_map(graph, user))
+    
 
 
 ###
